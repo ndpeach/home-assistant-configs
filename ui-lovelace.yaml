@@ -1,0 +1,210 @@
+title: 37 Ronton Road
+views:
+  - title: Floorplans
+    # Optional unique id for direct access /lovelace/${id}
+    id: Floorplans
+    panel: false
+    cards:
+    - type: picture-elements
+      image: /local/topfloor_1.jpg
+      title: Top Floor
+      elements:
+        - type: state-badge
+          entity: sensor.loft_t
+          style:
+            top: 77%
+            left: 18.5% 
+    - type: picture-elements
+      image: /local/firstfloor_2.jpg
+      title: First Floor
+      elements:
+        - type: state-badge
+          entity: sensor.loft_t
+          style:
+            top: 77%
+            left: 18.5% 
+    - type: picture-elements
+      image: /local/groundfloorplan.jpg
+      title: Ground Floor
+      elements:
+        - type: state-badge
+          entity: sensor.kitchen_t
+          style:
+            top: 73%
+            left: 42% 
+        - type: state-badge
+          entity: sensor.garage_t
+          style:
+            top: 22%
+            left: 62% 
+        - type: state-badge
+          entity: sensor.gamesroom_t
+          style:
+            top: 22%
+            left: 86% 
+        - type: state-badge
+          entity: sensor.lounge_t
+          style:
+            top: 82%
+            left: 15% 
+        - type: state-badge
+          entity: sensor.study_t
+          style:
+            top: 46.5%
+            left: 15% 
+        - type: state-badge
+          entity: sensor.outside_t
+          style:
+            top: 73%
+            left: 70% 
+
+  - title: Sensors
+    # Optional unique id for direct access /lovelace/${id}
+    id: Sensors
+    # Optional background (overwrites the global background).
+    background: radial-gradient(crimson, skyblue)
+    cards:
+     - type: entity-filter
+       card:
+          title: Who's home
+       entities:
+          - device_tracker.3010e45fabb7
+          - device_tracker.c4b301d527d7
+          - device_tracker.a8667f2eb2b1
+          - device_tracker.dca9048d4423
+          - device_tracker.04d6aa5fbe22
+          - device_tracker.9060f1366460
+          - device_tracker.90b9312ac1bd
+          - device_tracker.peachphone
+          - device_tracker.0cd74664f5d8
+          - device_tracker.wickham
+          - device_tracker.android7f4cde917396102b
+       state_filter:
+         - 'home'
+     - type: glance
+       title: Temperature Readings
+       entities:
+         - entity: sensor.garage_t
+           name: Garage
+           icon: mdi:thermometer
+         - entity: sensor.gamesroom_t
+           name: Games room
+           icon: mdi:thermometer
+         - entity: sensor.kitchen_t
+           name: Kitchen
+           icon: mdi:thermometer
+         - entity: sensor.loft_t
+           name: Loft
+           icon: mdi:thermometer
+         - entity: sensor.lounge_t
+           name: Lounge
+           icon: mdi:thermometer
+         - entity: sensor.outside_t
+           name: outside
+           icon: mdi:thermometer
+         - entity: sensor.study_t
+           name: Study
+           icon: mdi:thermometer
+     - type: history-graph
+       title: 'Temperature graphs'
+       hours_to_show: 72
+       refresh_interval: 300
+       entities:
+          - entity: sensor.outside_t
+            name: outside
+          - entity: sensor.gamesroom_t
+            name: Games room
+          - entity: sensor.garage_t
+            name: Garage
+     - type: weather-forecast
+       entity: weather.dark_sky
+     - type: picture-elements
+       image: /local/groundfloorplan.jpg
+       elements:
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.kitchen_t
+          style:
+            top: 73%
+            left: 42% 
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.garage_t
+          style:
+            top: 23%
+            left: 62% 
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.gamesroom_t
+          style:
+            top: 23%
+            left: 86% 
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.lounge_t
+          style:
+            top: 82%
+            left: 20% 
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.study_t
+          style:
+            top: 47%
+            left: 12% 
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.outside_t
+          style:
+            top: 76%
+            left: 60% 
+     - type: picture-elements
+       image: /local/topfloor.jpg
+       elements:
+        - type: state-label
+          tap_action: toggle
+          entity: sensor.loft_t
+          style:
+            top: 80%
+            left: 20% 
+
+    
+  - icon: mdi:grid
+  - title: Internet
+    id: internet
+    cards:
+     - type: vertical-stack
+       cards:
+        - type: history-graph
+          title: 'Bandwidth graphs'
+          hours_to_show: 72
+          refresh_interval: 3600
+          entities:
+             - entity: sensor.speedtest_download
+               name: Download
+             - entity: sensor.speedtest_upload
+               name: Upload
+        - type: history-graph
+          title: 'Connected to the Internet'
+          hours_to_show: 72
+          refresh_interval: 3600
+          entities:
+             - entity: binary_sensor.internet_up
+               name: connection
+        - type: history-graph
+          title: 'Internet Ping Times'
+          hours_to_show: 72
+          refresh_interval: 3600
+          entities:
+             - entity: sensor.template_ping_speed
+               name: Ping time
+        - type: iframe
+          url: http://hassio.local:3000/d/yo1xYfigz/internet-speeds?orgId=1&panelId=2&fullscreen&from=1535929200000&to=1536015599999
+
+  - icon: mdi:server-network
+  - title: Cameras
+    id: Cameras
+    cards:
+      - type: picture-entity
+        entity: camera.cam1
+  - icon: mdi:cctv
+    

@@ -1,0 +1,23 @@
+test_pushover:
+    alias: 'test_pushover'
+    sequence:
+      - service: notify.pushover
+        data:
+          title: TEST ALERT!
+          message: This is a test message!
+          data:
+            url: https://s-media-cache-ak0.pinimg.com/..
+
+
+test_actionable_notify:
+    alias: 'Test Actionable Notification'
+    sequence:
+      - service: notify.ios_nigels_iphone
+        data:
+          message:  'Kitchen lights are still on!'
+          data:
+            push:
+              badge: 0
+              category: "kitchenlights"
+            action_data:
+              entity_id: light.kitchen_lights

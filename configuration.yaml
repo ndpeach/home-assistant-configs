@@ -1,0 +1,307 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/London
+  # Customization file
+  customize: !include customize.yaml
+
+# Show links to resources in log and frontend
+introduction:
+
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+http:
+  # Secrets are defined in the file secrets.yam
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# setup for IOS
+ios: 
+  push:
+    categories:
+      - name: kitchenlights
+        identifier: kitchenlights (MUST BE LOWER CASE)
+        actions:
+          - identifier: LIGHTSOFF (MUST BE UPPER CASE)
+            title: "Turn Lights Off"
+            activationMode: 'background'
+            authenticationRequired: no
+            destructive: yes
+            behavior: 'default'
+
+influxdb:
+  host: 192.168.1.41
+  port: 8086
+  database: homeassistant
+  username: !secret influxdb_uid
+  password: !secret influxdb_pwd
+  max_retries: 3
+  default_measurement: state
+
+
+# Enables a map showing the location of tracked devices
+map:
+
+# Track the sun
+sun:
+
+history_graph:
+  gr2:
+    name: Temperature
+    entities:
+      - sensor.outside_t
+      - sensor.garage_t
+      - sensor.gamesroom_t
+    hours_to_show: 120
+  # gr3:
+    # name: Battery
+    # entities:
+      # - sensor.outside_b
+    # hours_to_show: 72
+  gr3:
+    name: Network Download Speed
+    entities:
+      - sensor.speedtest_download
+    hours_to_show: 72
+  gr4:
+    name: Network Upload Speed
+    entities:
+      - sensor.speedtest_upload
+    hours_to_show: 72
+  gr5:
+    name: Internet ping times
+    entities:
+      - binary_sensor.internet_up
+    hours_to_show: 72
+  gr6:
+    name: Ping graph
+    entities:
+      - sensor.template_ping_speed
+    hours_to_show: 72
+
+# Example configuration.yaml entry
+camera:
+  - platform: synology
+    url: http://192.168.1.19:5000
+    username: !secret synology_uid
+    password: !secret synology_password
+    timeout: 15
+    verify_ssl: false
+    
+notify:
+  - name: pushover
+    platform: pushover
+    api_key: !secret pushover_api_key
+    user_key: !secret pushover_user_key
+  - name: notify.twilio
+    platform: twilio_sms
+    from_number: !secret twilio_number
+  - name: notify.pushb
+    platform: pushbullet
+    api_key: !secret pushb_api_key
+  - name: notify.email
+    platform: smtp
+    server: !secret email_server
+    port: 587
+    timeout: 30
+    sender: !secret email_sender
+    encryption: starttls
+    username: !secret email_uid
+    password: !secret email_pwd
+    recipient:
+      - ndpeach@gmail.com
+      - nigel.peach@pega.com
+
+binary_sensor:
+  - platform: ping
+    name: internet up
+    host: 8.8.8.8
+    count: 2
+    scan_interval: 60
+
+# Weather prediction
+weather:
+  - platform: darksky
+    api_key: !secret weather_api_key
+    update_interval: '00:05:00'
+    units: si
+    monitored_conditions:
+      - summary
+      - icon
+      - nearest_storm_distance
+      - nearest_storm_bearing
+      - precip_type
+      - precip_intensity
+      - precip_probability
+      - temperature
+      - apparent_temperature
+      - dew_point
+      - wind_speed
+      - wind_bearing
+      - cloud_cover
+      - humidity
+      - pressure
+      - visibility
+      - ozone
+      - minutely_summary
+      - hourly_summary
+      - daily_summary
+      - temperature_max
+      - temperature_min
+      - apparent_temperature_max
+      - apparent_temperature_min
+      - precip_intensity_max
+sensor:
+  - platform: template
+    sensors:
+       template_ping_speed:
+         friendly_name: "Internet Ping speed"
+         value_template: '{{ states.binary_sensor.internet_up.attributes.round_trip_time_avg }}'
+         unit_of_measurement: 'ms'
+
+  - platform: alpha_vantage
+    api_key: !secret alpha_api_key
+    symbols:
+      - name: Pega
+        currency: USD
+        symbol: PEGA
+    foreign_exchange:
+      - from: GBP
+        to: USD
+        name: GBP
+  - platform: speedtest
+    monitored_conditions:
+      - ping
+      - download
+      - upload
+    # server_id: 838
+    server_id: 10280
+    minute:
+      - 0
+  - platform: google_travel_time
+    api_key: !secret google_trave_time_api_key
+    origin: Church Crookham, UK
+    destination: Reading, UK
+    
+  - platform: yr
+  - platform: mqtt
+    name: "gamesroom_t"
+    state_topic: /sensors/t/5c:cf:7f:ac:ab:b8
+    qos: 0
+    unit_of_measurement: "ºC"
+    expire_after: 700
+  - platform: mqtt
+    name: "kitchen_t"
+    state_topic: /sensors/t/a0:20:a6:1a:78:dd
+    qos: 0
+    unit_of_measurement: "ºC"
+    expire_after: 700
+  - platform: mqtt
+    name: "outside_t"
+    state_topic: /sensors/t/5c:cf:7f:40:ec:4b
+    qos: 0
+    unit_of_measurement: "ºC"
+    expire_after: 700
+  - platform: mqtt
+    name: "outside_b"
+    state_topic: /sensors/b/5c:cf:7f:40:ec:4b
+    qos: 0
+    expire_after: 700
+    unit_of_measurement: "V"
+  - platform: mqtt
+    name: "loft_t"
+    state_topic: /sensors/t/a0:20:a6:17:a8:d7
+    qos: 0
+    expire_after: 700
+    unit_of_measurement: "ºC"
+  - platform: mqtt
+    name: "garage_t"
+    state_topic: /sensors/t/5c:cf:7f:33:b6:92
+    qos: 0
+    expire_after: 700
+    unit_of_measurement: "ºC"
+  - platform: mqtt
+    name: "study_t"
+    state_topic: /sensors/t/5c:cf:7f:ab:aa:35
+    qos: 0
+    expire_after: 700
+    unit_of_measurement: "ºC"
+  - platform: mqtt
+    name: "lounge_t"
+    state_topic: /sensors/t/5c:cf:7f:10:8c:76
+    qos: 0
+    expire_after: 700
+    unit_of_measurement: "ºC"
+    
+    
+panel_iframe:
+  configurator:
+    title: Configurator
+    icon: mdi:wrench
+    url: http://hassio.local:3218    
+    
+
+# Text to speech
+tts:
+  - platform: google
+
+# Cloud
+cloud:
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+device_tracker: !include device_tracker.yaml
+
+
+
+mqtt:
+  discovery: true
+  discovery_prefix: hassio
+  broker: 192.168.1.41
+  username: !secret mqtt_uid
+  password: !secret mqtt_pwd
+
+zone:
+  - name: Work
+    icon: mdi:worker
+    latitude: 51.4582
+    longitude: -0.967838
+
+twilio:
+  account_sid: !secret twillio_account_sid
+  auth_token: !secret twillio_auth_token
