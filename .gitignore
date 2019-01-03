@@ -1,12 +1,12 @@
 # Example .gitignore file for your config dir.
 # A * ensures that everything will be ignored.
-*
+#*
 
 # You can whitelist files/folders with !, these will not be ignored.
 !*.yaml
 !.gitignore
 !*.md
-!www
+!./www
 
 # Ignore folders.
 .storage
@@ -25,4 +25,11 @@ known_devices.yaml
 ._.DS_Store
 plex.conf
 .ios.conf
-
+.HA_VERSION
+.DS_Store
+._home-assistant.log
+.uuid
+home-assistant.log
+home-assistant_v2.db
+home-assistant_v2.db-shm
+home-assistant_v2.db-wal
