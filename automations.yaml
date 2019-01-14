@@ -1,0 +1,105 @@
+ - id: checkoutsidetemperature
+   alias: "Check outside temperature"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: numeric_state
+     entity_id: sensor.outside_t
+     below: 9
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The temerature of the outside sensor is {{states.sensor.outside_t.state_with_unit}} on {{now().day}}/{{now().month}}/{{now().year}} at {{now().hour}}:{{now().minute}}:{{now().second}}
+       data:
+         push:
+           badge: 0
+           subtitle: "check the temperature"
+           thread-id: "outgside-temperature-notification-group"
+
+ - id: checkstudysensor
+   alias: "check study sensor"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.study_t
+     to: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The study sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the study sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+
+ - id: checkoutsidesensor
+   alias: "check outside sensor"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.outside_t
+     to: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The outside sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the outside  sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+ - id: checkgaragesensor
+   alias: "check garage sensor"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.garage_t
+     to: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The garage sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the garage sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+
+ - id: checkgamesroomsensor
+   alias: "check games room sensor"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.gamesroom_t
+     to: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The games room sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the games room  sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+
+
+

@@ -21,3 +21,11 @@ test_actionable_notify:
               category: "kitchenlights"
             action_data:
               entity_id: light.kitchen_lights
+
+msg_who_is_home:
+    alias: 'Test templates'
+    sequence:
+      - service: notify.ios_nigels_iphone
+        data_template:
+          message: >
+              The temerature of the outside sensor is now {{states.sensor.outside_t.state_with_unit}} on {{now().day}}/{{now().month}}/{{now().year}} at  {{now().hour}}:{{now().minute}}:{{now().second}}
