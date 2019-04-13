@@ -51,6 +51,8 @@ history:
 # View all events in a logbook
 logbook:
 
+system_health:
+
 # setup for IOS
 ios: 
   push:
@@ -80,6 +82,23 @@ map:
 
 # Track the sun
 sun:
+
+input_select:
+  camera_dropdown:
+    name: Cast camera
+    options:
+      - CAM1
+      - CAM2
+      - All Cameras
+    initial: All Cameras
+    icon: mdi:camera
+  cast_to_screen_dropdown:
+    name: To Screen
+    options:
+      - Lounge
+      - Kitchen
+    initial: Lounge
+    icon: mdi:cast
 
 history_graph:
   gr2:
@@ -155,38 +174,20 @@ binary_sensor:
     count: 2
     scan_interval: 60
 
+speedtestdotnet:
+  scan_interval:
+    minutes: 30
+  monitored_conditions:
+    - ping
+    - download
+    - upload
+
 # Weather prediction
 weather:
   - platform: darksky
     api_key: !secret weather_api_key
-    update_interval: '00:05:00'
-    units: si
-    monitored_conditions:
-      - summary
-      - icon
-      - nearest_storm_distance
-      - nearest_storm_bearing
-      - precip_type
-      - precip_intensity
-      - precip_probability
-      - temperature
-      - apparent_temperature
-      - dew_point
-      - wind_speed
-      - wind_bearing
-      - cloud_cover
-      - humidity
-      - pressure
-      - visibility
-      - ozone
-      - minutely_summary
-      - hourly_summary
-      - daily_summary
-      - temperature_max
-      - temperature_min
-      - apparent_temperature_max
-      - apparent_temperature_min
-      - precip_intensity_max
+    units: uk
+
 sensor:
   - platform: template
     sensors:
@@ -205,15 +206,6 @@ sensor:
       - from: GBP
         to: USD
         name: GBP
-  - platform: speedtest
-    monitored_conditions:
-      - ping
-      - download
-      - upload
-    # server_id: 838
-    server_id: 10280
-    minute:
-      - 0
   - platform: google_travel_time
     api_key: !secret google_trave_time_api_key
     origin: Church Crookham, UK

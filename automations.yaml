@@ -59,6 +59,27 @@
            subtitle: "check the outside  sensor"
            thread-id: "outgside-temperature-notification-group"
 
+ - id: checkoutsidesensoron
+   alias: "check outside sensor is back on"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.outside_t
+     from: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The outside sensor has come back online
+       data:
+         push:
+           badge: 0
+           subtitle: "check the outside  sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+
  - id: checkgaragesensor
    alias: "check garage sensor"
    hide_entity: True
@@ -73,6 +94,26 @@
        title: "Smart home alerts"
        message:  
           The garage sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the garage sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+ - id: checkgaragesensoron
+   alias: "check garage sensor online"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.garage_t
+     from: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:  
+          The garage sensor has come online again
        data:
          push:
            badge: 0
@@ -94,6 +135,26 @@
        title: "Smart home alerts"
        message:  
           The games room sensor has gone offline 
+       data:
+         push:
+           badge: 0
+           subtitle: "check the games room  sensor"
+           thread-id: "outgside-temperature-notification-group"
+
+ - id: checkgamesroomsensoron
+   alias: "check games room sensor backon"
+   hide_entity: True
+   initial_state: True
+   trigger:
+     platform: state
+     entity_id: sensor.gamesroom_t
+     from: 'unknown'
+   action:
+     service: notify.ios_nigels_iphone
+     data:
+       title: "Smart home alerts"
+       message:
+          The games room sensor has come back online
        data:
          push:
            badge: 0
